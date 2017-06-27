@@ -1,0 +1,34 @@
+machine:
+  hosts:
+      cms.dev: 127.0.0.1
+  pre:
+      - sudo apt-get update; USE_PRECOMPILE=true sudo -E circleci-install php 7.1.0
+
+  php:
+    version: 7.1.0
+  services:
+       - mysql
+
+dependencies:
+  override:
+      - composer install --no-interaction
+  pre:
+    - mysql -u root -e 'create database `phone`;'
+    - mysql -u root -e 'create database `phone_testing`;'
+    - mv .env.testing .env
+  post:
+    - php artisan migrate --force
+    - php artisan migrate --force --database='testing'
+    - php artisan db:seed
+
+general:
+  artifacts:
+    - "server.log"
+
+test:
+  pre:
+    - "php artisan serve":
+        background: true
+
+  override:
+    - php vendor/bin/phpunit

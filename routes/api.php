@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Calls Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
 */
+Route::prefix('calls')
+    ->namespace('Twilio\Calls\Incoming')
+    ->group(function () {
+        Route::get('incoming', 'CallsController@handle');
+    });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::prefix('items')
+    ->namespace('Twilio\Calls\Incoming\Menus')
+    ->group(function () {
+        Route::get('{item}', 'ItemsController@handle')->name('menu-item');
+        Route::get('{parent}/gather', 'ItemsController@handleGather')->name('menu-item-gather');
+    });

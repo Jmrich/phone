@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Gather;
+use App\Models\Say;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Schema::defaultStringLength(191);
+
+        Relation::morphMap([
+            'say' => Say::class,
+            'gather' => Gather::class,
+        ]);
     }
 
     /**

@@ -10,7 +10,7 @@ class CallsController extends BaseIncomingCallController
 {
     public function handle(Request $request)
     {
-        $company = Company::where('phone_number', $request->To)->firstOrFail();
+        $company = $this->getCompany($request);
         $menu = $company->defaultMenu();
         $menuItem = $menu->defaultItem();
 

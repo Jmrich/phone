@@ -24,6 +24,8 @@ class CreateMenuItemsTable extends Migration
             $table->integer('depth')->nullable();
             $table->unsignedInteger('digits')->nullable();
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

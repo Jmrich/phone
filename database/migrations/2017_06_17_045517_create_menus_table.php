@@ -23,6 +23,7 @@ class CreateMenusTable extends Migration
             $table->timestamps();
 
             $table->unique(['company_id', 'name']);
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

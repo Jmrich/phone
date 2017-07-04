@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGathersTable extends Migration
+class CreatePhoneNumbersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,15 @@ class CreateGathersTable extends Migration
      */
     public function up()
     {
-        Schema::create('gathers', function (Blueprint $table) {
+        Schema::create('phone_numbers', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('company_id');
-            $table->morphs('gatherable');
-            $table->string('input', 20)->default('dtmf');
-            $table->unsignedInteger('timeout')->default(5);
-            $table->string('finishOnKey')->default('#');
-            $table->boolean('bargeIn')->default(1);
+            $table->unsignedInteger('user_id')->nullable()->default(null);
+            $table->string('number');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -34,6 +32,6 @@ class CreateGathersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('gathers');
+        Schema::dropIfExists('phone_numbers');
     }
 }

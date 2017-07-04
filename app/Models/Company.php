@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    public function extensions()
+    {
+        return $this->hasMany(Extension::class);
+    }
+
     public function menus()
     {
         return $this->hasMany(Menu::class);

@@ -26,12 +26,12 @@ class Twiml
 
         $gather->{$verb}($noun, $verbOptions);
 
-        return $this->prepareResponse($gather);
+        return $this->render();
     }
 
-    private function prepareResponse(TwilioTwiml $twiml)
+    public function render()
     {
-        return '<Response>' . (string) $twiml . '</Response>';
+        return (string) $this->twiml;
     }
 
     public function sayError($url, $message = null, $method = 'GET')
@@ -44,5 +44,20 @@ class Twiml
         $this->twiml->redirect($url, ['method' => $method]);
 
         return $this->twiml;
+    }
+
+    public function dial(array $numbers)
+    {
+        if (count($numbers) > 10) {
+            throw new \InvalidArgumentException('No more than 10 numbers can be specified');
+        }
+
+        $dial = $this->twiml->dial();
+
+        foreach ($numbers as $number) {
+            $dial->{$number['type']}($number['to'], $number['options'] ?? []);
+        }
+
+        return $this->render();
     }
 }

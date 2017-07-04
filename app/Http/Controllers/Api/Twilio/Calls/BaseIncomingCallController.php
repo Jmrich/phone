@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api\Twilio\Calls;
 
+use App\Models\Company;
 use App\Services\Twilio\Twiml;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class BaseIncomingCallController extends Controller
@@ -13,6 +15,11 @@ class BaseIncomingCallController extends Controller
     public function __construct(Twiml $twiml)
     {
         $this->twiml = $twiml;
+    }
+
+    protected function getCompany(Request $request) : Company
+    {
+        return Company::where('phone_number', $request->To)->firstOrFail();
     }
 
     protected function gatherResponse($item, $actionUrl = null)
@@ -35,6 +42,16 @@ class BaseIncomingCallController extends Controller
         return $this->respond($twiml);
     }
 
+    protected function extensionResponse($item)
+    {
+        if ($item->actionable->extendable_type == 'user') {
+            $twiml = $this->twiml->dial($item->actionable->extendable->formatForDial());
+            return $this->respond($twiml);
+        }
+
+        throw new \InvalidArgumentException('Invalid extendable_type');
+    }
+
     protected function respond($content)
     {
         return response($content, 200, [
@@ -49,6 +66,8 @@ class BaseIncomingCallController extends Controller
                 return $this->gatherResponse($item);
             case 'say':
                 return $this->sayResponse($item);
+            case 'extension':
+                return $this->extensionResponse($item);
         }
     }
 }

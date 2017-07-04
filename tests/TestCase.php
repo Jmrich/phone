@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App\Models\Company;
+use App\Models\User;
 use App\Services\Twilio\Twilio;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use App\Exceptions\Handler;
@@ -40,5 +42,17 @@ abstract class TestCase extends BaseTestCase
     {
         $this->app->instance(ExceptionHandler::class, $this->oldExceptionHandler);
         return $this;
+    }
+
+    protected function createCompany(): Company
+    {
+        return factory(Company::class)->create();
+    }
+
+    protected function createUser($company): User
+    {
+        return factory(User::class)->create([
+            'company_id' => $company->id,
+        ]);
     }
 }

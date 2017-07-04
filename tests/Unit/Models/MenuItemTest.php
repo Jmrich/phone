@@ -17,7 +17,7 @@ class MenuItemTest extends TestCase
     /** @test */
     public function can_create_root_node()
     {
-        $company = factory(Company::class)->create();
+        $company = $this->createCompany();
 
         $menu = $company->menus()->save(factory(Menu::class)->make());
 
@@ -33,7 +33,7 @@ class MenuItemTest extends TestCase
     /** @test */
     public function can_save_action()
     {
-        $company = factory(Company::class)->create();
+        $company = $this->createCompany();
 
         $greeting = Say::create([
             'name' => 'first greeting',

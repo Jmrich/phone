@@ -15,12 +15,15 @@ class CreateGathersTable extends Migration
     {
         Schema::create('gathers', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('company_id');
             $table->morphs('gatherable');
             $table->string('input', 20)->default('dtmf');
             $table->unsignedInteger('timeout')->default(5);
             $table->string('finishOnKey')->default('#');
             $table->boolean('bargeIn')->default(1);
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

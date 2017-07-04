@@ -35,6 +35,7 @@ class LocalSeeder extends Seeder
         $gather = Gather::create([
             'gatherable_type' => 'say',
             'gatherable_id' => $say->id,
+            'company_id' => $company->id,
         ]);
 
         $menu = $company->menus()->save(factory(Menu::class)->make([

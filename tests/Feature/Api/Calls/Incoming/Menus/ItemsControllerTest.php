@@ -41,6 +41,7 @@ class ItemsControllerTest extends TestCase
         $gather = Gather::create([
             'gatherable_type' => 'say',
             'gatherable_id' => $say->id,
+            'company_id' => $company->id,
         ]);
 
         $menuItem->actionable()->associate($gather)->save();
@@ -89,6 +90,7 @@ class ItemsControllerTest extends TestCase
         $gather = Gather::create([
             'gatherable_type' => 'say',
             'gatherable_id' => $say->id,
+            'company_id' => $company->id,
         ]);
 
         $secondGreeting = Say::create([
@@ -264,6 +266,7 @@ class ItemsControllerTest extends TestCase
         $gather = Gather::create([
             'gatherable_type' => 'say',
             'gatherable_id' => $say->id,
+            'company_id' => $company->id,
         ]);
 
         $menuItem->actionable()->associate($gather)->save();

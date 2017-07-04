@@ -19,6 +19,8 @@ class CreateExtensionsTable extends Migration
             $table->nullableMorphs('extendable');
             $table->unsignedInteger('number');
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

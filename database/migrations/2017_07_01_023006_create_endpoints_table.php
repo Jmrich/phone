@@ -19,6 +19,8 @@ class CreateEndpointsTable extends Migration
             $table->unsignedInteger('user_id');
             $table->morphs('pointable');
             $table->timestamps();
+
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 

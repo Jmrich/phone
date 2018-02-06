@@ -179,6 +179,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\ModelObserverServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ValidationServiceProvider::class,
 
     ],
 

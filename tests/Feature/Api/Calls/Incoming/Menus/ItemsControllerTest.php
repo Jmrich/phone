@@ -6,11 +6,14 @@ use App\Models\Company;
 use App\Models\Endpoint;
 use App\Models\Extension;
 use App\Models\Gather;
+use App\Models\Media;
 use App\Models\PhoneNumber;
+use App\Models\Play;
 use App\Models\Say;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\User;
+use Illuminate\Http\File;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -312,5 +315,59 @@ class ItemsControllerTest extends TestCase
         $actual = $response->content();
 
         $this->assertXmlStringEqualsXmlString($expected, $actual);
+    }
+
+    /** @test */
+    public function can_handle_item_play_action()
+    {
+        $company = factory(Company::class)->create();
+
+        $menu = $company->menus()->save(factory(Menu::class)->make([
+            'is_active' => true,
+        ]));
+
+        $menuItem = factory(MenuItem::class)->create([
+            'company_id' => $company->id,
+            'menu_id' => $menu->id,
+        ]);
+
+        /** @var Play $play */
+        $play = Play::create([
+            'name' => 'first greeting',
+            'company_id' => $company->id,
+        ]);
+
+        $play->media()->save(factory(Media::class)->make(['company_id' => $company->id]));
+
+        $gather = Gather::create([
+            'gatherable_type' => 'play',
+            'gatherable_id' => $play->id,
+            'company_id' => $company->id,
+        ]);
+
+        $menuItem->actionable()->associate($gather)->save();
+
+        $menu->update([
+            'menu_item_id' => $menuItem->id
+        ]);
+
+        $route = route('incoming-call', [
+            'To' => $company->phone_number,
+            'From' => '+13104918163',
+            'Digits' => 1,
+        ]);
+        $response = $this->get($route);
+
+        $noun = $play->noun;
+
+        $itemUrl = route('menu-item-gather', [$menuItem]);
+
+        $expected = "<Response>
+                        <Gather action=\"$itemUrl\" method=\"GET\">
+                            <Play>$noun</Play>
+                        </Gather>
+                    </Response>";
+
+        $this->assertXmlStringEqualsXmlString($expected, $response->content());
     }
 }

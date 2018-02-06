@@ -8,7 +8,7 @@
 Route::prefix('calls')
     ->namespace('Twilio\Calls\Incoming')
     ->group(function () {
-        Route::get('incoming', 'CallsController@handle');
+        Route::get('incoming', 'CallsController@handle')->name('incoming-call');
     });
 
 Route::prefix('items')

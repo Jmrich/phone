@@ -5,11 +5,13 @@ use App\Models\Endpoint;
 use App\Models\Extension;
 use App\Models\Gather;
 use App\Models\PhoneNumber;
+use App\Models\Play;
 use App\Models\Say;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\File;
 
 class LocalSeeder extends Seeder
 {
@@ -26,15 +28,15 @@ class LocalSeeder extends Seeder
 
         $user = factory(User::class)->create(['company_id' => $company->id]);
 
-        $say = Say::create([
-            'name' => 'first greeting',
-            'noun' => 'Press 1 for something, press 2 to dial yourself',
+        $mainGreeting = factory(Play::class)->create([
             'company_id' => $company->id,
         ]);
 
+        $mainGreeting->createMedia(new File(storage_path('framework/testing/audio/default.wav')));
+
         $gather = Gather::create([
-            'gatherable_type' => 'say',
-            'gatherable_id' => $say->id,
+            'gatherable_type' => 'play',
+            'gatherable_id' => $mainGreeting->id,
             'company_id' => $company->id,
         ]);
 

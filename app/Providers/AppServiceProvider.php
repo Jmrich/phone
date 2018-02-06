@@ -6,6 +6,7 @@ use App\Models\Endpoint;
 use App\Models\Extension;
 use App\Models\Gather;
 use App\Models\PhoneNumber;
+use App\Models\Play;
 use App\Models\Say;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -25,9 +26,10 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'endpoint' => Endpoint::class,
             'extension' => Extension::class,
-            'say' => Say::class,
             'gather' => Gather::class,
             'number' => PhoneNumber::class,
+            'play' => Play::class,
+            'say' => Say::class,
             'user' => User::class,
         ]);
 
